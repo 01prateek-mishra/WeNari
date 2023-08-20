@@ -11,7 +11,7 @@ router.get('/', shopController.home)
 router.get('/myaccount', isAuth, shopController.getAccount);
 router.get('/customize', shopController.getCustomize);
 router.get('/admin', isAdminAuth, shopController.getAdmin);
-router.get('/product', isAuth, shopController.getProduct);
+router.get('/product', shopController.getProduct);
 router.get('/buyNow/:id', isAuth, shopController.getBuyNow);
 router.get('/product/:id', shopController.details);
 router.get('/cart', isAuth, shopController.getCart);
@@ -30,6 +30,6 @@ router.post('/deleteItem/:prodId', shopController.postDeleteProduct);
 router.post('/editPage', shopController.postEditPage);
 router.post('/addToWishlist', shopController.addToWishlist);
 router.post('/removeFromWishlist', shopController.removeFromWishlist);
-// router.post('/customize', isAuth, shopController.customize)
+router.post('/search', shopController.search);
 
 module.exports = router

@@ -37,16 +37,24 @@ exports.details = (req, res) => {
             }
         }
     }
+    let fname = '';
+    if (req.user) {
+        for (let i = 0; i < req.user.name.length; i++) {
+
+            fname += req.user.name[i]
+            if (req.user.name[i] == ' ') break;
+        }
+    }
     console.log(flag)
     Product.findOne({ _id: req.params.id }, (err, product) => {
 
-        let fname = '';
-        if (req.user) {
-            for (let i = 0; i < req.user.name.length; i++) {
+        if (!product) {
 
-                fname += req.user.name[i]
-                if (req.user.name[i] == ' ') break;
-            }
+            let errMsg = "Sorry, the requested product have been sold out!"
+
+            console.log('mc');
+            res.render('error', { errMsg });
+            return;
         }
         res.render('product_details', { product: product, fname: fname, flag: flag })
     })
@@ -349,6 +357,11 @@ exports.getCart = async (req, res) => {
 }
 exports.addToCart = (req, res) => {
 
+    if (!req.user) {
+
+        res.redirect('/login');
+        return;
+    }
     Product.findOne({ _id: req.body.id })
         .then(prod => {
 
@@ -455,6 +468,11 @@ exports.getWishlist = (req, res) => {
 }
 exports.addToWishlist = async (req, res) => {
 
+    if (!req.user) {
+
+        res.redirect('/login');
+        return;
+    }
     console.log(req.body.wishlistToggle)
 
     if (req.body.wishlistToggle) {
@@ -521,4 +539,22 @@ exports.removeFromWishlist = async (req, res) => {
     req.user.save()
         .then(() => res.redirect('/wishlist'))
         .catch((err) => console.log(err))
+}
+exports.search = (req, res) => {
+
+    const regex = new RegExp(req.body.searchText, 'i');
+
+    Product.find({ name: regex })
+        .then(prod => {
+
+            if (prod.length === 0) {
+
+                errMsg = "No product found"
+                res.render('error', { errMsg })
+                return;
+            }
+            console.log('mc');
+            console.log(prod)
+            res.render('product', { product: prod })
+        })
 }

@@ -43,10 +43,6 @@ textarea {
   line-height: inherit;
 }
 
-button {
-  border: none;
-}
-
 .wrapper {
 
   font-family: 'Poppins', sans-serif;
@@ -194,11 +190,12 @@ button {
 
   background-color: #ff4584;
   color: white;
+  border: none;
 }
 
-.err{
+.err {
   color: red;
   font-size: small;
-  padding-left:1rem ;
-  
+  padding-left: 1rem;
+
 }
