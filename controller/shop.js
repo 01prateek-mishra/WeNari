@@ -27,12 +27,14 @@ exports.details = (req, res) => {
 
     let flag = false;
 
-    for (let i = 0; i < req.user.wishlistItems.length; i++) {
+    if (req.user) {
+        for (let i = 0; i < req.user.wishlistItems.length; i++) {
 
-        if (req.user.wishlistItems[i]._id.equals(req.params.id)) {
+            if (req.user.wishlistItems[i]._id.equals(req.params.id)) {
 
-            flag = true;
-            break;
+                flag = true;
+                break;
+            }
         }
     }
     console.log(flag)
@@ -74,7 +76,14 @@ exports.getCustomize = (req, res, next) => {
             if (req.user.name[i] == ' ') break;
         }
     }
-    res.render('customize', { user_name: req.user.name });
+    res.render('customize', { fname: fname });
+}
+exports.postCustomize = (req, res) => {
+
+    const [name, email, material, desc, imageUrl] = req.body;
+    const CustomizeRequestBody = `Name -> ${name}, Email -> ${email}, material -> ${material}, desc -> ${desc}`;
+
+
 }
 
 exports.getAdmin = (req, res, next) => {

@@ -1,8 +1,5 @@
 extends layout.pug
 
-
-  
-
 block style
   link(rel="stylesheet" href = "/style/customize.css")
 block content
@@ -11,9 +8,8 @@ block content
   section#form-cnt.container.form-container
     header.header
     h1#title.text-center Saree Customization 
-    form#survey-form(action = "/customize" method = "post")
+    form#survey-form
       input(type="hidden" name="_csrf" value=`${csrfToken}`)
-
       .form-group
         label#name-label(for='name') Name
         input#name.form-control(type='text' name='name' placeholder='Enter your name' required='')
@@ -34,4 +30,13 @@ block content
         label.form-label.txtInside(for=' ') Sample Photo 
         input#attach.form-control.formChoose.sizeChange(type='file' accept='.jpg, .jpeg, .png, .pdf')
       .form-group
-        button#button.btn(type = 'submit') Submit
+        a#button.btn(onClick = "formSubmit()") Submit
+
+block scripts 
+  script.
+    const formSubmit = () => {
+
+      const name = document.getElementById("name").value, email = document.getElementById("email").value, desc = document.getElementById("comments").value;
+
+      document.getElementById("button").href = `mailto:pr.prateekmishra@gmail.com?subject=Customize Saree Request&body=Name -> ${name}, Email -> ${email}, Description -> ${desc}`
+    }

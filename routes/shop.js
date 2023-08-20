@@ -9,7 +9,7 @@ const shopController = require('../controller/shop')
 router.get('/', shopController.home)
 
 router.get('/myaccount', isAuth, shopController.getAccount);
-router.get('/customize', isAuth, shopController.getCustomize);
+router.get('/customize', shopController.getCustomize);
 router.get('/admin', isAdminAuth, shopController.getAdmin);
 router.get('/product', isAuth, shopController.getProduct);
 router.get('/buyNow/:id', isAuth, shopController.getBuyNow);
@@ -30,5 +30,6 @@ router.post('/deleteItem/:prodId', shopController.postDeleteProduct);
 router.post('/editPage', shopController.postEditPage);
 router.post('/addToWishlist', shopController.addToWishlist);
 router.post('/removeFromWishlist', shopController.removeFromWishlist);
+// router.post('/customize', isAuth, shopController.customize)
 
 module.exports = router

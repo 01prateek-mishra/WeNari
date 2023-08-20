@@ -16,12 +16,12 @@ exports.getForgetPage = (req, res, next) => {
     res.render('auth/forgetPassword')
 }
 
-exports.getChangePass = (req,res,next) => {
+exports.getChangePass = (req, res, next) => {
     let user_name = '';
     if (req.user) user_name = req.user.name;
-    res.render('auth/changePass',{
-        user_name:user_name,
-        email:req.user.email
+    res.render('auth/changePass', {
+        user_name: user_name,
+        email: req.user.email
     });
 }
 
@@ -189,17 +189,11 @@ exports.postLogout = (req, res, next) => {
 exports.postForgetPass = (req, res, next) => {
     let { email, password, confirmPassword } = req.body;
 
-    // if(req.session.isLoggedIn){
-    //     path='auth/changePass';
-    //     redir='/';
-    // }
-    // else{
-    const path='auth/forgetPassword';
-    const redir='/login';
-    // }
+    const path = 'auth/forgetPassword';
+    const redir = '/login';
 
     if (!validator.validate(email)) {
-        // console.log(email);
+
         res.render(path, {
             email: email,
             password: password,
@@ -238,7 +232,7 @@ exports.postForgetPass = (req, res, next) => {
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
-                return ;
+                return;
             }
             else {
                 currUser = user;
@@ -275,37 +269,37 @@ exports.postForgetPass = (req, res, next) => {
 }
 
 
-exports.postChangePassword = async (req,res,next) => {
+exports.postChangePassword = async (req, res, next) => {
     let { oldPassword, password, confirmPassword } = req.body;
 
     // if(req.session.isLoggedIn){
-        path='auth/changePass';
-        redir='/';
+    path = 'auth/changePass';
+    redir = '/';
     // }
     // else{
     // const path='auth/forgetPassword';
     // const redir='/login';
     // // }
 
-    const isValid = await bcrypt.compare(oldPassword,req.user.password);
+    const isValid = await bcrypt.compare(oldPassword, req.user.password);
 
-    if(!isValid){
+    if (!isValid) {
         res.render(path, {
             error: 'invalidLength',
             message: 'Old Password is incorrect',
-            oldPassword:oldPassword,
+            oldPassword: oldPassword,
             password: password,
             confirmPassword: confirmPassword
         })
         return;
     }
-    
+
 
     if (password.trim().length < 5) {
         res.render(path, {
             error: 'invalidLength',
             message: 'Password length must be (> 5)',
-            oldPassword:oldPassword,
+            oldPassword: oldPassword,
             password: password,
             confirmPassword: confirmPassword
         })
@@ -316,7 +310,7 @@ exports.postChangePassword = async (req,res,next) => {
         res.render(path, {
             error: 'invalidMatch',
             message: 'Password and Confirm Password do not match',
-            oldPassword:oldPassword,
+            oldPassword: oldPassword,
             password: password,
             confirmPassword: confirmPassword
         })
@@ -329,7 +323,7 @@ exports.postChangePassword = async (req,res,next) => {
 
     if (!data) {
         res.render(path, {
-            oldPassword:oldPassword,
+            oldPassword: oldPassword,
             password: '',
             confirmPassword: '',
             error: 'pass Invalid',
@@ -341,7 +335,7 @@ exports.postChangePassword = async (req,res,next) => {
         res.redirect(redir);
     }
 
-    
+
 
 
     // let currUser;

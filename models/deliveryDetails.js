@@ -11,5 +11,4 @@ const deliveryDetailsSchema = new mongoose.Schema({
     state: String,
     userId: String
 })
-// module.exports = deliveryDetailsSchema
 module.exports = new mongoose.model('deliveryDetails', deliveryDetailsSchema)
