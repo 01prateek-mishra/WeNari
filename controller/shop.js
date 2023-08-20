@@ -45,7 +45,6 @@ exports.details = (req, res) => {
             if (req.user.name[i] == ' ') break;
         }
     }
-    console.log(flag)
     Product.findOne({ _id: req.params.id }, (err, product) => {
 
         if (!product) {
@@ -56,6 +55,7 @@ exports.details = (req, res) => {
             res.render('error', { errMsg });
             return;
         }
+        console.log(flag)
         res.render('product_details', { product: product, fname: fname, flag: flag })
     })
 }
@@ -555,6 +555,6 @@ exports.search = (req, res) => {
             }
             console.log('mc');
             console.log(prod)
-            res.render('product', { product: prod })
+            res.render('product', { product: prod, searchFlag: 1, searchText: req.body.searchText })
         })
 }

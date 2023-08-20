@@ -30,6 +30,6 @@ router.post('/deleteItem/:prodId', shopController.postDeleteProduct);
 router.post('/editPage', shopController.postEditPage);
 router.post('/addToWishlist', shopController.addToWishlist);
 router.post('/removeFromWishlist', shopController.removeFromWishlist);
-router.post('/search', shopController.search);
+router.post('/product/search', shopController.search);
 
 module.exports = router

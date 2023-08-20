@@ -5,8 +5,12 @@ block style
 
 block content    
 
+  if searchFlag
+    .heading Showing sarees having "#{searchText}" in their name
+  else
+    .heading All Products
   .container(style = "margin:auto")
-    form.m-3(action="/search" style = "display: flex; justify-content: center" method = "POST")
+    form.m-3(action="/product/search" style = "display: flex; justify-content: right" method = "POST")
       input(type="hidden" name="_csrf" value=`${csrfToken}`)
       .form-group
         input#name.form-control(type='text' name='searchText' placeholder='Name of the saree' required='')
