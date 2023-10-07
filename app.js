@@ -2,10 +2,12 @@ const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
 const multer = require('multer')
-
+const dotenv = require('dotenv')
 const router = require('./routes/shop.js')
 const authRouter = require('./routes/auth');
 const Product = require('./models/product');
+
+dotenv.config('/env');
 
 // importing models
 const User = require('./models/user');
@@ -22,8 +24,6 @@ const store = MongoDbStore({
     uri: MONGODB_URI,
     collection: 'session'
 });
-
-
 const app = express()
 
 const Storage = multer.diskStorage({
@@ -36,7 +36,6 @@ const Storage = multer.diskStorage({
         cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
     }
 })
-
 const upload = multer({
     storage: Storage
 }).single('image')
@@ -94,15 +93,15 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/', router);
-app.use(authRouter);
-
-
-
+app.use('/', authRouter);
 
 // MONGOOSE connection and port listening
 mongoose.connect(MONGODB_URI)
-    .then(res => {
+
+    .then(() => {
+
         let port = process.env.PORT
+        console.log(port)
         if (port == null || port == "") port = 80;
 
         app.listen(port, () => console.log("Server started successfully"))

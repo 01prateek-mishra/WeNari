@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router() // middleware function for creating routes!
 
 const isAuth = require('../middleware/isAuth');
 const isAdminAuth = require('../middleware/isAdminAuth');

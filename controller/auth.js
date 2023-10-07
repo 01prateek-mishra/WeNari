@@ -164,7 +164,6 @@ exports.postLogin = (req, res, next) => {
                 req.session.isLoggedIn = true;
                 req.session.user = currUser;
                 if (email === 'admin@1.com') {
-                    console.log('ghusa kya');
                     req.session.admin = true;
                 }
 
