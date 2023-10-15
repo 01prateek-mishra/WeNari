@@ -19,12 +19,12 @@ body
           | Login or create an account to explore WeNaari
     .contentBx
       .center
-        form(method='post' action='/sign-up')
+        form(method='post' action='/signup')
           input(type="hidden" name="_csrf" value=`${csrfToken}`)
 
           h1 CREATE ACCOUNT
           div.err
-            if(error==='nameErr')
+            if(error === 'nameErr')
               p Name cannot be empty 
             else if (error === 'mobErr')
               p Mobile number must be 10 digit long 

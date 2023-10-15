@@ -18,10 +18,10 @@ exports.getForgetPage = (req, res, next) => {
 
 exports.getChangePass = (req, res, next) => {
     let user_name = '';
-    if (req.user) user_name = req.user.name;
+    if (req.session.user) user_name = req.session.user.name;
     res.render('auth/changePass', {
         user_name: user_name,
-        email: req.user.email
+        email: req.session.user.email
     });
 }
 
@@ -30,6 +30,7 @@ exports.getChangePass = (req, res, next) => {
 // storing data in database
 exports.postSingnup = (req, res, next) => {
     const { fullName, mobileNo, email, password, confirmPassword } = req.body;
+    let currUser
 
     const userInfo = {
         fullName: fullName,
@@ -112,7 +113,7 @@ exports.postSingnup = (req, res, next) => {
                     email: email,
                     password: hashPassword
                 })
-
+                currUser = user;
                 return user.save();
             }
         })
@@ -126,7 +127,16 @@ exports.postSingnup = (req, res, next) => {
                 return;
             }
             else {
-                res.status(200).redirect('/login');
+                console.log('Signup successfull');
+                req.session.isLoggedIn = true;
+                req.session.user = currUser;
+                if (email === 'admin@1.com') {
+                    req.session.admin = true;
+                }
+                req.session.save(err => {
+                    console.log(err);
+                    res.redirect('/');
+                });
             }
         })
         .catch(err => {
@@ -280,7 +290,7 @@ exports.postChangePassword = async (req, res, next) => {
     // const redir='/login';
     // // }
 
-    const isValid = await bcrypt.compare(oldPassword, req.user.password);
+    const isValid = await bcrypt.compare(oldPassword, req.session.user.password);
 
     if (!isValid) {
         res.render(path, {
@@ -317,8 +327,8 @@ exports.postChangePassword = async (req, res, next) => {
     }
 
     const encryptPass = await bcrypt.hash(password, 15)
-    req.user.password = encryptPass;
-    const data = await req.user.save();
+    req.session.user.password = encryptPass;
+    const data = await req.session.user.save();
 
     if (!data) {
         res.render(path, {
@@ -339,7 +349,7 @@ exports.postChangePassword = async (req, res, next) => {
 
     // let currUser;
 
-    // User.findOne({ email: req.user.email })
+    // User.findOne({ email: req.session.user.email })
     //     .then(user => {
     //         if (!user) {
     //             return ;

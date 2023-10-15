@@ -12,25 +12,25 @@ exports.home = (req, res) => {
 
     Product.find((err, product_data) => {
 
-        if (req.user) {
+        if (req.session.user) {
 
-            for (let i = 0; i < req.user.name.length; i++) {
+            for (let i = 0; i < req.session.user.name.length; i++) {
 
-                fname += req.user.name[i]
-                if (req.user.name[i] == ' ') break;
+                fname += req.session.user.name[i]
+                if (req.session.user.name[i] == ' ') break;
             }
         }
-        res.render('index', { product_data: product_data, fname: fname })
+        res.render('index', { product_data: product_data })
     })
 }
 exports.details = (req, res) => {
 
     let flag = false;
 
-    if (req.user) {
-        for (let i = 0; i < req.user.wishlistItems.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.wishlistItems.length; i++) {
 
-            if (req.user.wishlistItems[i]._id.equals(req.params.id)) {
+            if (req.session.user.wishlistItems[i]._id.equals(req.params.id)) {
 
                 flag = true;
                 break;
@@ -38,11 +38,11 @@ exports.details = (req, res) => {
         }
     }
     let fname = '';
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
     Product.findOne({ _id: req.params.id }, (err, product) => {
@@ -56,35 +56,35 @@ exports.details = (req, res) => {
             return;
         }
         console.log(flag)
-        res.render('product_details', { product: product, fname: fname, flag: flag })
+        res.render('product_details', { product: product, flag: flag })
     })
 }
 exports.getAccount = (req, res, next) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    res.render('account', { fname: fname });
+    res.render('account');
 }
 
 exports.getCustomize = (req, res, next) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    res.render('customize', { fname: fname });
+    res.render('customize');
 }
 exports.postCustomize = (req, res) => {
 
@@ -98,31 +98,30 @@ exports.getAdmin = (req, res, next) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    res.render('admin', { fname: fname });
+    res.render('admin');
 }
 
 exports.getProduct = (req, res, next) => {
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
     Product.find()
         .then(prod => {
             // console.log(user);
             res.render('product', {
-                fname: fname,
                 product: prod
             });
 
@@ -137,31 +136,30 @@ exports.getEditProfile = (req, res, next) => {
 
     let fname = '';
 
-    if (req.user) {
+    if (req.session.user) {
 
-        for (let i = 0; i < req.user.name.length; i++) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
     res.render('editProfile', {
-        user_name: req.user.name,
-        name: req.user.name,
-        email: req.user.email,
-        phoneNo: req.user.phoneNo,
-        fname: fname
+        user_name: req.session.user.name,
+        name: req.session.user.name,
+        email: req.session.user.email,
+        phoneNo: req.session.user.phoneNo,
     });
 }
 
 exports.getEditPage = (req, res, next) => {
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
     const prodId = req.params.prodId;
@@ -254,11 +252,11 @@ exports.postEditProfile = (req, res, next) => {
         return;
     }
 
-    req.user.email = email;
-    req.user.name = name;
-    req.user.phoneNo = phoneNo;
+    req.session.user.email = email;
+    req.session.user.name = name;
+    req.session.user.phoneNo = phoneNo;
 
-    req.user.save()
+    req.session.user.save()
         .then(data => {
             res.redirect('/');
         })
@@ -280,7 +278,7 @@ exports.postNewAddress = (req, res) => {
         address: req.body.address,
         city: req.body.city,
         state: req.body.state,
-        userId: req.user._id
+        userId: req.session.user._id
     });
     deliverydetails.save()
         .then(res.redirect('/myAddress'))
@@ -290,74 +288,74 @@ exports.getBuyNow = async (req, res, next) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
     const product = await Product.findOne({ _id: req.params.id })
 
-    deliveryDetails.find({ userId: req.user._id }, (err, data) => {
+    deliveryDetails.find({ userId: req.session.user._id }, (err, data) => {
 
-        res.render('addressDetail', { data: data, fname: fname, product: product })
+        res.render('addressDetail', { data: data, product: product })
     })
 }
 exports.getmyAddress = (req, res) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    deliveryDetails.find({ userId: req.user._id }, (err, data) => {
+    deliveryDetails.find({ userId: req.session.user._id }, (err, data) => {
 
         console.log(data[0])
-        res.render('myAdress', { data: data, fname: fname })
+        res.render('myAdress', { data: data })
     })
 }
 exports.getCart = async (req, res) => {
 
     // const cartItems = [];
-    // for (let i = 0; i < req.user.cartItems.length; i++) {
+    // for (let i = 0; i < req.session.user.cartItems.length; i++) {
 
-    //     const product = await Product.findOne({ _id: req.user.cartItems[i]._id })
+    //     const product = await Product.findOne({ _id: req.session.user.cartItems[i]._id })
     //     if (product) {
     //         cartItems.push(product);
     //     }
-    //     // if (req.user.cartItems[i]._id.equals(product.id)) {
+    //     // if (req.session.user.cartItems[i]._id.equals(product.id)) {
 
-    //     //     req.user.cartItems.splice(i, 1)
+    //     //     req.session.user.cartItems.splice(i, 1)
     //     //     break
     //     // }
     // }
     // // console.log(cartItems);
-    // req.user.cartItems = cartItems;
+    // req.session.user.cartItems = cartItems;
 
-    // req.user.save()
+    // req.session.user.save()
     //     .then(() => {
 
     //     })
     //     .catch((err) => console.log(err))
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    res.render('cart', { cartItems: req.user.cartItems, fname: fname });
+    res.render('cart', { cartItems: req.session.user.cartItems });
 }
 exports.addToCart = (req, res) => {
 
-    if (!req.user) {
+    if (!req.session.user) {
 
         res.redirect('/login');
         return;
@@ -369,7 +367,7 @@ exports.addToCart = (req, res) => {
         })
         .then(async (data) => {
 
-            const user = await User.findOne({ _id: req.user._id })
+            const user = await User.findOne({ _id: req.session.user._id })
 
             let flag = 1;
 
@@ -397,22 +395,24 @@ exports.addToCart = (req, res) => {
 }
 exports.removeFromCart = async (req, res) => {
 
-    for (let i = 0; i < req.user.cartItems.length; i++) {
+    for (let i = 0; i < req.session.user.cartItems.length; i++) {
 
-        if (req.user.cartItems[i]._id.equals(req.body.productId)) {
+        if (req.session.user.cartItems[i]._id.equals(req.body.productId)) {
 
-            req.user.cartItems.splice(i, 1)
+            req.session.user.cartItems.splice(i, 1)
             break
         }
     }
-    console.log(req.user.cartItems)
-    req.user.save()
+    console.log(req.session.user.cartItems)
+    req.session.user.save()
         .then(() => res.redirect('/cart'))
         .catch((err) => console.log(err))
 }
 exports.postAdminProd = (req, res, next) => {
     console.log(req.file);
     let store = req.file.path;
+    console.log(req.file)
+    console.log(store)
     // store=store.substr(6);
 
     const product = new Product({
@@ -424,10 +424,6 @@ exports.postAdminProd = (req, res, next) => {
         fabric: req.body.fabric,
         description: req.body.description,
         imageUrl: store,
-        image: {
-            data: req.file.filename,
-            content: 'image/png'
-        }
     })
     product.save()
         .then(() => res.send("Product data saved successfully in the database"))
@@ -457,18 +453,18 @@ exports.getWishlist = (req, res) => {
 
     let fname = '';
 
-    if (req.user) {
-        for (let i = 0; i < req.user.name.length; i++) {
+    if (req.session.user) {
+        for (let i = 0; i < req.session.user.name.length; i++) {
 
-            fname += req.user.name[i]
-            if (req.user.name[i] == ' ') break;
+            fname += req.session.user.name[i]
+            if (req.session.user.name[i] == ' ') break;
         }
     }
-    res.render('wishlist', { wishlistItems: req.user.wishlistItems, fname: fname });
+    res.render('wishlist', { wishlistItems: req.session.user.wishlistItems });
 }
 exports.addToWishlist = async (req, res) => {
 
-    if (!req.user) {
+    if (!req.session.user) {
 
         res.redirect('/login');
         return;
@@ -484,7 +480,7 @@ exports.addToWishlist = async (req, res) => {
             })
             .then(async (data) => {
 
-                const user = await User.findOne({ _id: req.user._id })
+                const user = await User.findOne({ _id: req.session.user._id })
 
                 let flag = 1;
 
@@ -511,32 +507,32 @@ exports.addToWishlist = async (req, res) => {
     }
     else {
 
-        for (let i = 0; i < req.user.wishlistItems.length; i++) {
+        for (let i = 0; i < req.session.user.wishlistItems.length; i++) {
 
-            if (req.user.wishlistItems[i]._id.equals(req.body.id)) {
+            if (req.session.user.wishlistItems[i]._id.equals(req.body.id)) {
 
                 console.log('isme aaya hai madharchod')
-                req.user.wishlistItems.splice(i, 1)
+                req.session.user.wishlistItems.splice(i, 1)
                 break
             }
         }
-        req.user.save()
+        req.session.user.save()
             .then(() => res.redirect('/product/' + req.body.id))
             .catch((err) => console.log(err))
     }
 }
 exports.removeFromWishlist = async (req, res) => {
 
-    for (let i = 0; i < req.user.wishlistItems.length; i++) {
+    for (let i = 0; i < req.session.user.wishlistItems.length; i++) {
 
-        if (req.user.wishlistItems[i]._id.equals(req.body.productId)) {
+        if (req.session.user.wishlistItems[i]._id.equals(req.body.productId)) {
 
-            req.user.wishlistItems.splice(i, 1)
+            req.session.user.wishlistItems.splice(i, 1)
             break
         }
     }
-    console.log(req.user.wishlistItems)
-    req.user.save()
+    console.log(req.session.user.wishlistItems)
+    req.session.user.save()
         .then(() => res.redirect('/wishlist'))
         .catch((err) => console.log(err))
 }

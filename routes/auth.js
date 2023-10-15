@@ -9,7 +9,7 @@ route.get('/signup', isLoginAuth, authController.getSignup);
 route.get('/forgetPass', isLoginAuth, authController.getForgetPage);
 route.get('/changePass', authController.getChangePass);
 
-route.post('/sign-up', authController.postSingnup);
+route.post('/signup', authController.postSingnup);
 route.post('/login', authController.postLogin);
 route.post('/logout', authController.postLogout);
 route.post('/forgetPass', authController.postForgetPass);

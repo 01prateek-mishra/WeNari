@@ -13,7 +13,7 @@ dotenv.config('/env');
 const User = require('./models/user');
 
 // package to define the session and maintain the cross site forgery
-const MONGODB_URI = "mongodb+srv://admin-prateek:test123@cluster0.a5ercz0.mongodb.net/weNari";
+const MONGODB_URI = process.env.MONGODB_URI
 const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
@@ -40,24 +40,21 @@ const upload = multer({
     storage: Storage
 }).single('image')
 
-
 // PUBLIC
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/saree_images', express.static(path.join(__dirname, 'saree_images')));
 app.use(express.urlencoded({ extended: true }))
 
-// pug
+// Setting views
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
-
 
 // multer use
 app.use(upload);
 
-
 // setting up the session 
 app.use(session({
-    secret: 'the authenticatino secret to establish a sessin for a particualar user',
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     store: store
@@ -67,33 +64,19 @@ app.use(session({
 app.use(csrfProtection);
 
 app.use((req, res, next) => {
-    if (!req.session.user) {
-        return next();
-    }
 
-    User.findOne(req.session.user._id)
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    // we can now directly use this variables (csrfToken, isLoggedIn, admin, fnmae) in our views file, now we don't need to pass these values from the controller when doing render!
 
-})
-
-app.use((req, res, next) => {
-    // res.locals.user_name = req.user.name || 'null';
     res.locals.csrfToken = req.csrfToken();
     res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.admin = req.session.admin;
+    res.locals.fname = req.session.user.name;
 
     next();
 })
-
 // Routes
-app.use('/', router);
-app.use('/', authRouter);
+app.use(router);
+app.use(authRouter);
 
 // MONGOOSE connection and port listening
 mongoose.connect(MONGODB_URI)
@@ -101,8 +84,6 @@ mongoose.connect(MONGODB_URI)
     .then(() => {
 
         let port = process.env.PORT
-        console.log(port)
-        if (port == null || port == "") port = 80;
 
         app.listen(port, () => console.log("Server started successfully"))
     })
