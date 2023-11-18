@@ -65,12 +65,12 @@ app.use(csrfProtection);
 
 app.use((req, res, next) => {
 
-    // we can now directly use this variables (csrfToken, isLoggedIn, admin, fnmae) in our views file, now we don't need to pass these values from the controller when doing render!
+    // we can now directly use this variables (csrfToken, isLoggedIn, admin, fname) in our views file, now we don't need to pass these values from the controller when doing render!
 
     res.locals.csrfToken = req.csrfToken();
     res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.admin = req.session.admin;
-    res.locals.fname = req.session.user.name;
+    if (req.session.user) res.locals.user = req.session.user.name;
 
     next();
 })
