@@ -26,8 +26,6 @@ body
               li.nav-item
                 a.nav-link.active(href="/admin") Add Product 
             else 
-              //- li.nav-item
-              //-   a.nav-link.active Shop
               li.nav-item
                 a.nav-link.active(href = "/cart")
                   img#nav-icon(src='/images/cart-icon.png' alt='cart-icon')
@@ -46,11 +44,6 @@ body
                     form(method="post" action="/logout")
                       input(type="hidden" name="_csrf" value=`${csrfToken}`)
                       button.dropdown-item(type="submit") Logout
-                //-   a.dropdown-item(href='#') Another action
-                //- li
-                //-   hr.dropdown-divider
-                //- li
-                //-   a.dropdown-item(href='#') Something else here
 
   block content
 

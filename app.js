@@ -70,7 +70,7 @@ app.use((req, res, next) => {
     res.locals.csrfToken = req.csrfToken();
     res.locals.isLoggedIn = req.session.isLoggedIn;
     res.locals.admin = req.session.admin;
-    if (req.session.user) res.locals.user = req.session.user.name;
+    if (req.session.user) res.locals.fname = req.session.user.name.split(' ')[0];
 
     next();
 })
